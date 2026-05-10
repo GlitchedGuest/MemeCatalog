@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MemeCatalog/MemeCatalog.csproj" />
+  <Project Path="MemeCatalogDatabase/MemeCatalogDatabase.csproj" Id="3dee297f-dd7e-4054-9bd7-97d8b6d7a69a" />
+</Solution>
