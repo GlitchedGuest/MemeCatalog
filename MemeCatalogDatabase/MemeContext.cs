@@ -9,7 +9,6 @@ namespace MemeCatalogDatabase
     {
         public DbSet<Meme> Memes { get; set; }
         public DbSet<Tag> Tags { get; set; }
-        public DbSet<FileType> FileTypes { get; set; }
 
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)

@@ -8,11 +8,14 @@ namespace MemeCatalogDatabase
     public class Meme
     {
         public int MemeId { get; set; }
-        public string Name { get; set; }
-        public string Path { get; set; } 
+        public string? Name { get; set; }
+        public string? Path { get; set; } 
 
-        public virtual int FileTypeId { get; set; }
-        public virtual FileType FileType { get; set; }
+        public string? FileType
+        {
+            get => Path?.Substring(Path.LastIndexOf('.') + 1, Path.Length - 1 - Path.LastIndexOf('.'));
+            set => Path?.Substring(Path.LastIndexOf('.') + 1, Path.Length - 1 - Path.LastIndexOf('.'));
+        }
 
         public virtual ICollection<Tag>
             Tags

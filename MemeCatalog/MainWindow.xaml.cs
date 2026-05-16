@@ -1,5 +1,10 @@
-﻿using System.ComponentModel;
+﻿using MemeCatalogDatabase;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.ComponentModel;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,8 +14,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MemeCatalogDatabase;
-using Microsoft.EntityFrameworkCore;
 
 namespace MemeCatalog
 {
@@ -18,7 +21,7 @@ namespace MemeCatalog
     {
         private readonly MemeContext _context = new MemeContext();
 
-        private CollectionViewSource categoryViewSource;
+        private Meme newMeme;
 
         public MainWindow()
         {
@@ -28,6 +31,28 @@ namespace MemeCatalog
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _context.Database.EnsureCreated();
+        }
+
+        private void Browse_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.ShowDialog();
+
+            mediaElement.Source = new Uri(ofd.FileName);
+            
+            TextBoxPath.Text = ofd.FileName;
+            TextBoxName.Text = ofd.SafeFileName;
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            newMeme = new Meme
+            {
+                Name = TextBoxName.Text,
+                Path = TextBoxPath.Text
+            };
+            _context.Memes.Add(newMeme);
+            _context.SaveChanges();
         }
 
         protected override void OnClosing(CancelEventArgs e)
