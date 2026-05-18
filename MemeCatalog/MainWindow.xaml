@@ -9,10 +9,11 @@
     <Grid>
         <Button Content="Browse" HorizontalAlignment="Center" Margin="0,329,0,85" 
         Click="Browse_Click" Height="20" Width="124"/>
-        <Button Content="Save" HorizontalAlignment="Left" Margin="640,380,0,34" 
+        <Button Content="Save" HorizontalAlignment="Center" Margin="0,366,0,48" 
         Click="Save_Click" Height="20" Width="123"/>
         <MediaElement Name="mediaElement" HorizontalAlignment="Left" Height="275" Margin="192,26,0,0" VerticalAlignment="Top" Width="482"/>
         <TextBox Name="TextBoxPath" HorizontalAlignment="Left" Margin="168,329,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="TextBoxName" HorizontalAlignment="Left" Margin="214,371,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name="TextBoxName" HorizontalAlignment="Left" Margin="168,372,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Dodaj Tag" HorizontalAlignment="Left" Margin="541,320,0,0" VerticalAlignment="Top" Height="38" Width="131" Click="Tag_Click"/>
     </Grid>
 </Window>

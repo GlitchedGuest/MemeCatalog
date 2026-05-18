@@ -44,6 +44,13 @@ namespace MemeCatalog
             TextBoxName.Text = ofd.SafeFileName;
         }
 
+        private void Tag_Click(object sender, RoutedEventArgs e)
+        {
+            TagAdd tagWindow = new TagAdd();
+
+            tagWindow.Show();
+        }
+
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             newMeme = new Meme
