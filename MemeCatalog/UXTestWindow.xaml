@@ -1,0 +1,34 @@
+﻿<Window x:Class="MemeCatalog.UXTestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MemeCatalog"
+        mc:Ignorable="d"
+        Title="UXTestWindow" Height="500" Width="800" ResizeMode="NoResize" Background="Black" Loaded="Window_Loaded">
+    <Grid>
+        <TabControl TabStripPlacement="Left" Background="Black">
+            <TabItem Header="Add Meme" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
+                <Grid Background="Black">
+                    <MediaElement Name="mediaElement" Height="300" Margin="0,0,0,0" VerticalAlignment="Top" Width="600"/>
+                    <Button Content="Browse" Margin="0,335,0,0" VerticalAlignment="Top" Height="20" Click="BrowseButton_Click"/>
+                    <TextBlock Name="Tb_Path" Margin="50,360,0,0" TextWrapping="Wrap" Text="FilePath" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox Name="Tb_Name" Margin="50,380,0,0" TextWrapping="Wrap" Text="FileName" VerticalAlignment="Top" Foreground="White" Background="Black"/>
+                    <TextBlock Margin="0,360,0,0" TextWrapping="Wrap" Text="Path:" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBlock Margin="0,380,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top" Foreground="White"/>
+                    <Button Content="Add to Database" HorizontalAlignment="Left" Margin="0,401,0,0" VerticalAlignment="Top" Click="AddButton_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Browse Memes" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
+                <Grid Background="Green"/>
+            </TabItem>
+            <TabItem Header="Tags" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
+                <Grid Background="Red"/>
+            </TabItem>
+            <TabItem Header="Options" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
+                <Grid Background="Yellow"/>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>
