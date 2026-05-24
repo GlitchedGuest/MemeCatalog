@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System.ComponentModel;
+using System.Printing;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -22,6 +23,7 @@ namespace MemeCatalog
         private readonly MemeContext _context = new MemeContext();
 
         private Meme newMeme;
+        private List<Tag> tags = new List<Tag>();
 
         public MainWindow()
         {
@@ -31,6 +33,9 @@ namespace MemeCatalog
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _context.Database.EnsureCreated();
+            _context.Tags.Load();
+            var list = _context.Tags.Local.Select(x => x.Name).ToList();
+            ListView.ItemsSource = list;
         }
 
         private void Browse_Click(object sender, RoutedEventArgs e)
@@ -44,11 +49,25 @@ namespace MemeCatalog
             TextBoxName.Text = ofd.SafeFileName;
         }
 
+        private void BrowseMemes_Click(object sender, RoutedEventArgs e)
+        {
+            BrowseMemes browseMemes = new BrowseMemes();
+
+            browseMemes.Show();
+        }
+
         private void Tag_Click(object sender, RoutedEventArgs e)
         {
             TagAdd tagWindow = new TagAdd();
 
             tagWindow.Show();
+        }
+
+        private void AssignTag_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedIndex = ListView.SelectedIndex;
+            var tag = _context.Tags.ToList();
+            tags.Add(tag[selectedIndex]);
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -58,6 +77,7 @@ namespace MemeCatalog
                 Name = TextBoxName.Text,
                 Path = TextBoxPath.Text
             };
+            tags.ForEach(x => { newMeme.Tags.Add(x); });
             _context.Memes.Add(newMeme);
             _context.SaveChanges();
         }

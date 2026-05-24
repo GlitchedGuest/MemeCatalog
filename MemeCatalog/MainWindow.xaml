@@ -15,5 +15,14 @@
         <TextBox Name="TextBoxPath" HorizontalAlignment="Left" Margin="168,329,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         <TextBox Name="TextBoxName" HorizontalAlignment="Left" Margin="168,372,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         <Button Content="Dodaj Tag" HorizontalAlignment="Left" Margin="541,320,0,0" VerticalAlignment="Top" Height="38" Width="131" Click="Tag_Click"/>
+        <ListView Name="ListView" Margin="0,0,642,10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Content="BrowseMemes" HorizontalAlignment="Left" Margin="659,26,0,0" VerticalAlignment="Top" Height="38" Width="131" Click="BrowseMemes_Click"/>
+        <Button Content="Dodaj Tag" HorizontalAlignment="Left" Margin="541,261,0,0" VerticalAlignment="Top" Height="38" Width="131" Click="Tag_Click"/>
     </Grid>
 </Window>
