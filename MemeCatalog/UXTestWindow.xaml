@@ -17,6 +17,7 @@
                     <TextBlock Margin="0,360,0,0" TextWrapping="Wrap" Text="Path:" VerticalAlignment="Top" Foreground="White"/>
                     <TextBlock Margin="0,380,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top" Foreground="White"/>
                     <Button Content="Add to Database" HorizontalAlignment="Left" Margin="0,401,0,0" VerticalAlignment="Top" Click="AddButton_Click"/>
+                    <Button Content="Add Tags" HorizontalAlignment="Left" Margin="100,401,0,0" VerticalAlignment="Top" Click="AddTagButton_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Browse Memes" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">

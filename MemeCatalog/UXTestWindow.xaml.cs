@@ -56,5 +56,11 @@ namespace MemeCatalog
             Tb_Path.Text = "";
             Tb_Name.Text = "";
         }
+        private void AddTagButton_Click(object sender, RoutedEventArgs e)
+        {
+            UXTagAdd tagWindow = new UXTagAdd();
+
+            tagWindow.Show();
+        }
     }
 }
