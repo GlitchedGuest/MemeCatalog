@@ -9,7 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Zrzut ekranu 2026-02-18 204909.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MemeCatalogDatabase\MemeCatalogDatabase.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Zrzut ekranu 2026-02-18 204909.png" />
   </ItemGroup>
 
 </Project>

@@ -23,18 +23,22 @@ namespace MemeCatalog
         private readonly MemeContext _context = new MemeContext();
         private int offsetLeft = -100;
         private int offsetTop = -50;
+
+        public List<Tag> tags = new List<Tag>();
+        public List<Tag> loadedTags = new List<Tag>();
+
         public UXTagAdd()
         {
             InitializeComponent();
             _context.Tags.Load();
-            var list = _context.Tags.Local.Select(x => x.Name).ToList();
+            var list = _context.Tags.Local.ToList();
             var i = 0;
             foreach (var item in list)
             {
-                CreateButton(item, i,TagButton_Click);
+                CreateButton(item.Name, i,TagButton_Click);
                 i++;
             }
-            CreateButton("+", i, TagButton_Click);
+            CreateButton("+", i, AddTagButton_Click);
         }
         private void CreateButton(string content, int i, RoutedEventHandler method)
         {
@@ -53,10 +57,27 @@ namespace MemeCatalog
         }
         private void TagButton_Click(object sender, RoutedEventArgs e)
         {
-            if((sender as Button).Background == Brushes.Gray)
+            var tag = _context.Tags.Where(x => x.Name.Equals((sender as Button).Content)).FirstOrDefault();
+            if ((sender as Button).Background == Brushes.Gray)
+            {
                 (sender as Button).Background = Brushes.White;
+                if(tag != null)
+                    tags.Remove(tag);
+            }
             else
+            {
                 (sender as Button).Background = Brushes.Gray;
+                if(tag != null)
+                    tags.Add(tag);
+            }
+        }
+        private void AddTagButton_Click(object sender, RoutedEventArgs e)
+        {
+            ;
+        }
+        private void FinishButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

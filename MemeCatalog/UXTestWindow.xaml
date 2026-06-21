@@ -21,10 +21,18 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Browse Memes" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
-                <Grid Background="Green"/>
+                <Grid Name="BrowseGrid" Background="Black">
+                    <TextBox Name="TBBrowse" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="331" Height="31"/>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="346,8,0,0" VerticalAlignment="Top" Height="34" Width="136" Click="BrowseMemesButton_Click"/>
+                    <ScrollViewer Name="ScrollViewer" Margin="0,50,0,0">
+                           
+                    </ScrollViewer>
+                </Grid>
             </TabItem>
             <TabItem Header="Tags" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
-                <Grid Background="Red"/>
+                <Grid Background="Red">
+                    <WrapPanel />
+                </Grid>
             </TabItem>
             <TabItem Header="Options" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
                 <Grid Background="Yellow"/>

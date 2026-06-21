@@ -21,5 +21,10 @@ namespace MemeCatalogDatabase
             Tags
         { get; private set; } =
             new ObservableCollection<Tag>();
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

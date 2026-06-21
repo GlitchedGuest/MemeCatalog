@@ -6,5 +6,7 @@
         xmlns:local="clr-namespace:MemeCatalog"
         mc:Ignorable="d"
         Title="UXTagAdd" Height="450" Width="410" Background="Black">
-    <Grid Name="GridButtons"/>
+    <Grid Name="GridButtons">
+        <Button Content="Add Tags" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Bottom" Height="62" Width="410"  Click="FinishButton_Click"/>
+    </Grid>
 </Window>
