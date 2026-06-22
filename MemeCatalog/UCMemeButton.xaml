@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:MemeCatalog"
              mc:Ignorable="d" >
     <StackPanel>
-        <Image Source="/Zrzut ekranu 2026-02-18 204909.png" Height="100" Width="100" />
-        <Button x:Name="_button" Content="MAMMON" BorderBrush="#00000000" Background="#00DDDDDD" Foreground="White" MaxWidth="100"/>
+        <Image x:Name="_image" Source="/Zrzut ekranu 2026-02-18 204909.png" Height="100" Width="100" />
+        <TextBlock x:Name="_button" Text="MAMMON" Background="#00DDDDDD" Foreground="White" MaxWidth="100" TextAlignment="Center"/>
     </StackPanel>
 
 </UserControl>
