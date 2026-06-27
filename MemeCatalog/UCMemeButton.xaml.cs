@@ -45,12 +45,12 @@ namespace MemeCatalog
             MediaPlayer mediaPlayer = sender as MediaPlayer;
             DrawingVisual drawingVisual = new DrawingVisual();
             DrawingContext drawingContext = drawingVisual.RenderOpen();
-            drawingContext.DrawVideo(mediaPlayer, new Rect(0, 0, 100, 100));
+            drawingContext.DrawVideo(mediaPlayer, new Rect(0, 0, 100, 50));
             drawingContext.Close();
 
             double dpiX = 1 / 200;
             double dpiY = 1 / 200;
-            RenderTargetBitmap bmp = new RenderTargetBitmap(100, 100, dpiX, dpiY, PixelFormats.Pbgra32);
+            RenderTargetBitmap bmp = new RenderTargetBitmap(100, 50, dpiX, dpiY, PixelFormats.Pbgra32);
             bmp.Render(drawingVisual);
 
             _image.Source = bmp;
