@@ -28,8 +28,6 @@ namespace MemeCatalog
         private readonly MemeContext _context = new MemeContext();
         private List<Tag> tags = new List<Tag>();
         private WrapPanel wrappanel = new WrapPanel();
-        DispatcherTimer timer = new DispatcherTimer();
-        private bool dragStarted = false;
         Meme currentMeme = null;
 
         public UXTestWindow()
@@ -44,7 +42,6 @@ namespace MemeCatalog
             //LVMemesList.ItemsSource = _context.Memes.ToList();
             //TestUC._button.Click += BrowseMemesButton_Click;
             CreateButtons();
-            ME_ShowMeme.MediaOpened += MediaOpened;
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
@@ -52,7 +49,7 @@ namespace MemeCatalog
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.ShowDialog();
 
-            mediaElement.Source = new Uri(ofd.FileName);
+            MP_AddMeme.LoadMedia(ofd.FileName);
             Tb_Path.Text = ofd.FileName;
             Tb_Name.Text = ofd.SafeFileName;
         }
@@ -66,7 +63,7 @@ namespace MemeCatalog
             tags.ForEach(x => newMeme.Tags.Add(_context.Tags.Where(y => y.TagId == x.TagId).ToList()[0]));
             _context.Memes.Add(newMeme);
             _context.SaveChanges();
-            mediaElement.Source = null;
+            //mediaElement.Source = null;
             Tb_Path.Text = "";
             Tb_Name.Text = "";
            // LVMemesList.ItemsSource = _context.Memes.Select(x => x.Name).ToList();
@@ -129,64 +126,22 @@ namespace MemeCatalog
             BrowseMemeGrid.Visibility = Visibility.Collapsed;
             ShoweMemeGrid.Visibility = Visibility.Visible;
             currentMeme = ((sender as Button).Content as UCMemeButton).meme;
-            ME_ShowMeme.Source = new Uri(currentMeme.Path);
-            ME_ShowMeme.Play();
+            MP_ShowMeme.LoadMedia(currentMeme.Path);
             TB_Show_FileName.Text = ((sender as Button).Content as UCMemeButton).meme.Name;
             TB_Show_FilePath.Text = ((sender as Button).Content as UCMemeButton).meme.Path;
         }
-        private void MediaOpened(object sender, RoutedEventArgs e)
-        {
-            if (currentMeme.FileType == "mp4")
-            {
-                VideoProgressBar.Visibility = Visibility.Visible;
-                VideoProgressBar.Maximum = ME_ShowMeme.NaturalDuration.TimeSpan.Ticks;
-                timer.Interval = TimeSpan.FromMilliseconds(1);
-                timer.Tick += timer_Tick;
-                timer.Start();
-            }
-            else
-                VideoProgressBar.Visibility = Visibility.Collapsed;
-        }
 
-        void timer_Tick(object sender, EventArgs e)
-        {
-            if (ME_ShowMeme.Source != null)
-            {
-                if (ME_ShowMeme.NaturalDuration.HasTimeSpan && !dragStarted)
-                {
-                    VideoProgressBar.Value = ME_ShowMeme.Position.Ticks;
-                }
-                    
-            }
-        }
+        
         private void ShowMemeBackButton_Click(object sender, RoutedEventArgs e)
         {
             currentMeme = null;
             ShoweMemeGrid.Visibility = Visibility.Collapsed;
             BrowseMemeGrid.Visibility = Visibility.Visible;
-            ME_ShowMeme.Source = null;
+            MP_ShowMeme.DeloadMedia();
         }
         private void ExplorerButton_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer", $"/select, {TB_Show_FilePath.Text}");
-        }
-
-        private void Slider_DragCompleted(object sender, DragCompletedEventArgs e)
-        {   
-            dragStarted = false;
-            ME_ShowMeme.Play();
-        }
-
-        private void Slider_DragStarted(object sender, DragStartedEventArgs e)
-        {
-            ME_ShowMeme.Pause();
-            dragStarted = true;
-        }
-
-        private void Slider_ValueChanged(object sender,RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (dragStarted)
-                ME_ShowMeme.Position = new TimeSpan((long)VideoProgressBar.Value);
         }
     }
 }

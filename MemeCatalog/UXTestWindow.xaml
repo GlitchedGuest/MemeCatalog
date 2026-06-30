@@ -10,7 +10,7 @@
         <TabControl TabStripPlacement="Left" Background="Black">
             <TabItem Header="Add Meme" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
                 <Grid Background="Black">
-                    <MediaElement Name="mediaElement" Height="300" Margin="0,0,0,0" VerticalAlignment="Top" Width="600"/>
+                    <local:MediaPlayer x:Name="MP_AddMeme" VerticalAlignment="Top"/>
                     <Button Content="Browse" Margin="0,335,0,0" VerticalAlignment="Top" Height="20" Click="BrowseButton_Click"/>
                     <TextBlock Name="Tb_Path" Margin="50,360,0,0" TextWrapping="Wrap" Text="FilePath" VerticalAlignment="Top" Foreground="White"/>
                     <TextBox Name="Tb_Name" Margin="50,380,0,0" TextWrapping="Wrap" Text="FileName" VerticalAlignment="Top" Foreground="White" Background="Black"/>
@@ -22,20 +22,19 @@
             </TabItem>
             <TabItem Header="Browse Memes" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
                 <Grid Name="BrowseGrid" Background="Black">
-                    <Grid Name="BrowseMemeGrid" Visibility="Collapsed">
+                    <Grid Name="BrowseMemeGrid" Visibility="Visible">
                         <TextBox Name="TBBrowse" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="331" Height="31"/>
                         <Button Content="Button" HorizontalAlignment="Left" Margin="346,8,0,0" VerticalAlignment="Top" Height="34" Width="136" Click="BrowseMemesButton_Click" Background="#FFDDDDDD"/>
                         <ScrollViewer Name="ScrollViewer" Margin="0,50,0,0"/>
                     </Grid>
-                    <Grid Name="ShoweMemeGrid" Visibility="Visible">
-                        <MediaElement x:Name="ME_ShowMeme" Volume="0.5" Width="672" Height="330" VerticalAlignment="Top" ScrubbingEnabled="True" LoadedBehavior="Manual"/>
+                    <Grid Name="ShoweMemeGrid" Visibility="Collapsed">
+                        <local:MediaPlayer x:Name="MP_ShowMeme" VerticalAlignment="Top"/>
                         <Button Content="Back" Width="100" Height="46" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="ShowMemeBackButton_Click"/>
                         <Button Content="Show in Explorer" Width="100" Height="46" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="ExplorerButton_Click" Margin="0,0,110,0"/>
                         <TextBlock Name="TB_Show_FilePath" Margin="50,360,0,0" TextWrapping="Wrap" Text="FilePath" VerticalAlignment="Top" Foreground="White"/>
                         <TextBlock Name="TB_Show_FileName" Margin="50,380,0,0" TextWrapping="Wrap" Text="FileName" VerticalAlignment="Top" Foreground="White" Background="Black"/>
                         <TextBlock Margin="0,360,0,0" TextWrapping="Wrap" Text="Path:" VerticalAlignment="Top" Foreground="White"/>
                         <TextBlock Margin="0,380,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top" Foreground="White"/>
-                        <Slider Name="VideoProgressBar" VerticalAlignment="Top" Margin="40,290,40,0" ValueChanged="Slider_ValueChanged" Thumb.DragStarted="Slider_DragStarted" Thumb.DragCompleted="Slider_DragCompleted"/>
                     </Grid>
                 </Grid>
             </TabItem>

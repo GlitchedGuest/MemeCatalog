@@ -21,7 +21,7 @@ namespace MemeCatalog
     {
 
         public Meme meme;
-        private MediaPlayer mediaPlayer = new MediaPlayer();
+        private System.Windows.Media.MediaPlayer mediaPlayer = new System.Windows.Media.MediaPlayer();
 
         public UCMemeButton()
         {
@@ -42,7 +42,8 @@ namespace MemeCatalog
 
         private void mediaplayer_OpenMedia(object sender, EventArgs e)
         {
-            MediaPlayer mediaPlayer = sender as MediaPlayer;
+
+            System.Windows.Media.MediaPlayer mediaPlayer = sender as System.Windows.Media.MediaPlayer;
             DrawingVisual drawingVisual = new DrawingVisual();
             DrawingContext drawingContext = drawingVisual.RenderOpen();
             drawingContext.DrawVideo(mediaPlayer, new Rect(0, 0, 100, 50));
@@ -56,6 +57,7 @@ namespace MemeCatalog
             _image.Source = bmp;
 
             mediaPlayer.Close();
+            
         }
     }
 }
