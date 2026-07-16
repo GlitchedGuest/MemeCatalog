@@ -45,16 +45,30 @@
                     </Grid>
                 </Grid>
             </TabItem>
+            
             <TabItem Header="Tags" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
-                <Grid Background="Red">
-                    <WrapPanel />
+                <Grid>
+                    <Grid Name="Grid_BrowseTags" Background="Black" Visibility="Visible">
+                        <TextBox Name="TBox_Tags_SearchBar" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="331" Height="31"/>
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="346,8,0,0" VerticalAlignment="Top" Height="34" Width="136" Click="SearchMemesButtonClick" Background="#FFDDDDDD"/>
+                        <ScrollViewer Name="SV_Tags_BrowseTags" Margin="0,50,0,0"/>
+                    </Grid>
+
+                    <Grid Name="Grid_InspectTag" Background="Black" Visibility="Collapsed">
+                        <TextBlock Text="Tag: " Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="24" Margin="10,10,0,0"/>
+                        <TextBox Name="TBox_Tags_TagName" HorizontalAlignment="Left" Margin="63,12,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="239" FontSize="24"/>
+                        <Button Click="UpdateTagButtonClick" Content="Update Tag" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="24" Margin="0,11,232,0" RenderTransformOrigin="0.06,0.781" />
+                        <Button Click="InspectTagsBackButtonClick" Content="Back" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="24" Margin="0,10,10,0" RenderTransformOrigin="0.06,0.781" />
+                        <Button Click="DeleteTagButtonClick" Content="Delete Tag" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="24" Margin="0,10,112,0" RenderTransformOrigin="0.06,0.781" />
+                        <ScrollViewer Name="SV_MemesWithTags" Margin="0,50,0,0"/>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Options" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
                 <Grid Background="Yellow"/>
             </TabItem>
         </TabControl>
-        
+
         <Grid Name="Grid_Tags" Background="Black" Visibility="Collapsed" HorizontalAlignment="Left" Margin="113,0,0,0" Width="687">
             <Button Content="Back" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="AddTagBackButtonClick" Height="34" Width="77"/>
             <ScrollViewer Name="SV_BrowseTags" Margin="0,50,0,50"/>

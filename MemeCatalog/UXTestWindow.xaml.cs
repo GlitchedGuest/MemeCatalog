@@ -28,10 +28,12 @@ namespace MemeCatalog
 
         //Wrappanel for buttons
         private WrapPanel _wrapPanelBrowseMemes = new WrapPanel();
+        private WrapPanel _wrapPanelBrowseToAddTags = new WrapPanel();
         private WrapPanel _wrapPanelBrowseTags = new WrapPanel();
 
         //Variables for Creating/editing Memes
         private Meme _meme = null;
+        private Tag _tag = null;
         private Button _buttonReference = null;
 
 
@@ -45,12 +47,13 @@ namespace MemeCatalog
         {
             _context.Database.EnsureCreated();
             LoadMemesButtons();
-            LoadTagsButtons();
+            
+            LoadBrowseTagsButtons();
         }
 
         //Loading buttons
 
-        private Button CreateTagButton(Tag tag)
+        private Button CreateTagButton(Tag tag, RoutedEventHandler function)
         {
             Button _button = new Button();
 
@@ -61,7 +64,7 @@ namespace MemeCatalog
             _button.Width = 100;
             _button.Background = Brushes.White;
             _button.Content = tag.Name;
-            _button.Click += TagButtonClick;
+            _button.Click += function;
 
             return _button;
         }
@@ -69,18 +72,32 @@ namespace MemeCatalog
         {
             _context.Tags.Load();
 
-            _wrapPanelBrowseTags.Orientation = Orientation.Horizontal;
-            _wrapPanelBrowseTags.HorizontalAlignment = HorizontalAlignment.Left;
-            _wrapPanelBrowseTags.VerticalAlignment = VerticalAlignment.Top;
+            _wrapPanelBrowseToAddTags.Orientation = Orientation.Horizontal;
+            _wrapPanelBrowseToAddTags.HorizontalAlignment = HorizontalAlignment.Left;
+            _wrapPanelBrowseToAddTags.VerticalAlignment = VerticalAlignment.Top;
 
             var _tagList = _context.Tags.ToList();
 
             foreach (var i in _tagList)
             {
-                _wrapPanelBrowseTags.Children.Add(CreateTagButton(i));
+                _wrapPanelBrowseToAddTags.Children.Add(CreateTagButton(i,TagButtonClick));
             }
-            SV_BrowseTags.Content = _wrapPanelBrowseTags;
+            SV_BrowseTags.Content = _wrapPanelBrowseToAddTags;
             
+        }
+        private void LoadBrowseTagsButtons()
+        {
+            _wrapPanelBrowseToAddTags.Orientation = Orientation.Horizontal;
+            _wrapPanelBrowseToAddTags.HorizontalAlignment = HorizontalAlignment.Left;
+            _wrapPanelBrowseToAddTags.VerticalAlignment = VerticalAlignment.Top;
+
+            var _tagList = _context.Tags.ToList();
+
+            foreach (var i in _tagList)
+            {
+                _wrapPanelBrowseTags.Children.Add(CreateTagButton(i, InspectTagButtonClick));
+            }
+            SV_Tags_BrowseTags.Content = _wrapPanelBrowseTags;
         }
         private Button CreateMemeButton(Meme meme)
         {
@@ -156,12 +173,13 @@ namespace MemeCatalog
         }
         private void AddTagButtonClick(object sender, RoutedEventArgs e)
         {
-            Grid_Tags.Visibility = Visibility.Visible;
-            foreach (Button i in _wrapPanelBrowseTags.Children)
+            LoadTagsButtons();
+            foreach (Button i in _wrapPanelBrowseToAddTags.Children)
             {
                 if (_tagsSet.Contains(i.Content))
                     i.Background = Brushes.Gray;
             }
+            Grid_Tags.Visibility = Visibility.Visible;
         }
 
         //Browse Memes
@@ -174,7 +192,8 @@ namespace MemeCatalog
         }
         private void UpdateTagsButtonClick(object sender, RoutedEventArgs e)
         {
-            foreach (Button i in _wrapPanelBrowseTags.Children)
+            LoadTagsButtons();
+            foreach (Button i in _wrapPanelBrowseToAddTags.Children)
             {
                 if (_tagsSet.Contains(i.Content))
                     i.Background = Brushes.Gray;
@@ -234,7 +253,7 @@ namespace MemeCatalog
             TBlock_Inspect_FilePath.Text = ((sender as Button).Content as UCMemeButton).meme.Path;
         }
 
-        //Tag
+        //Tag Adding
 
         private void TagButtonClick(object sender, RoutedEventArgs e)
         {
@@ -253,7 +272,8 @@ namespace MemeCatalog
         private void AddTagBackButtonClick(object sender, RoutedEventArgs e)
         {
             Grid_Tags.Visibility = Visibility.Collapsed;
-            foreach (Button i in _wrapPanelBrowseTags.Children)
+            _wrapPanelBrowseToAddTags.Children.Clear();
+            foreach (Button i in _wrapPanelBrowseToAddTags.Children)
             {
                 if (i.Background == Brushes.Gray)
                     i.Background = Brushes.White;
@@ -270,10 +290,63 @@ namespace MemeCatalog
             _context.Tags.Add(_newTag);
             _context.SaveChanges();
 
-            _wrapPanelBrowseTags.Children.Add(CreateTagButton(_newTag));
+            _wrapPanelBrowseToAddTags.Children.Add(CreateTagButton(_newTag, TagButtonClick));
 
             TBox_AddTag.Text = "";
 
         }
+
+        //Tags
+
+        private void InspectTagButtonClick(object sender, RoutedEventArgs e)
+        {
+            Grid_BrowseTags.Visibility = Visibility.Collapsed;
+            _tag = _context.Tags.Where(x => x.Name == (sender as Button).Content).FirstOrDefault();
+            TBox_Tags_TagName.Text = _tag.Name;
+
+            var _memesWithTags = _context.Memes.Where(x => x.Tags.Contains(_tag)).ToList();
+            var _wp = new WrapPanel();
+            _wp.Orientation = Orientation.Horizontal;
+            _wp.HorizontalAlignment = HorizontalAlignment.Left;
+            _wp.VerticalAlignment = VerticalAlignment.Top;
+
+            foreach (var i in _memesWithTags)
+            {
+                _wp.Children.Add(CreateMemeButton(i));
+            }
+            SV_MemesWithTags.Content = _wp;
+            _buttonReference = sender as Button;
+            Grid_InspectTag.Visibility = Visibility.Visible;
+        }
+        private void InspectTagsBackButtonClick(object sender, RoutedEventArgs e)
+        {
+            Grid_InspectTag.Visibility = Visibility.Collapsed;
+            _buttonReference = null;
+            _tag = null;
+            Grid_BrowseTags.Visibility = Visibility.Visible;
+        }
+
+        private void UpdateTagButtonClick(object sender, RoutedEventArgs e)
+        {
+            _tag.Name = TBox_Tags_TagName.Text;
+            _buttonReference.Content = TBox_Tags_TagName.Text;
+            _context.SaveChanges();
+        }
+
+        private void DeleteTagButtonClick(object sender, RoutedEventArgs e)
+        {
+            _context.Tags.Remove(_tag);
+
+            (SV_Tags_BrowseTags.Content as WrapPanel).Children.Remove(_buttonReference);
+
+            _buttonReference = null;
+            _tag = null;
+
+            _context.SaveChanges();
+
+            Grid_InspectTag.Visibility = Visibility.Collapsed;
+            Grid_BrowseTags.Visibility = Visibility.Visible;
+        }
+
     }
 }
