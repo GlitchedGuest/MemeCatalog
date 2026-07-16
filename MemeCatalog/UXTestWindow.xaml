@@ -7,34 +7,41 @@
         mc:Ignorable="d"
         Title="UXTestWindow" Height="500" Width="800" ResizeMode="NoResize" Background="Black" Loaded="Window_Loaded">
     <Grid>
+        
         <TabControl TabStripPlacement="Left" Background="Black">
-            <TabItem Header="Add Meme" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
-                <Grid Background="Black">
-                    <local:MediaPlayer x:Name="MP_AddMeme" VerticalAlignment="Top"/>
-                    <Button Content="Browse" Margin="0,335,0,0" VerticalAlignment="Top" Height="20" Click="BrowseButton_Click"/>
-                    <TextBlock Name="Tb_Path" Margin="50,360,0,0" TextWrapping="Wrap" Text="FilePath" VerticalAlignment="Top" Foreground="White"/>
-                    <TextBox Name="Tb_Name" Margin="50,380,0,0" TextWrapping="Wrap" Text="FileName" VerticalAlignment="Top" Foreground="White" Background="Black"/>
-                    <TextBlock Margin="0,360,0,0" TextWrapping="Wrap" Text="Path:" VerticalAlignment="Top" Foreground="White"/>
-                    <TextBlock Margin="0,380,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top" Foreground="White"/>
-                    <Button Content="Add to Database" HorizontalAlignment="Left" Margin="0,401,0,0" VerticalAlignment="Top" Click="AddButton_Click"/>
-                    <Button Content="Add Tags" HorizontalAlignment="Left" Margin="100,401,0,0" VerticalAlignment="Top" Click="AddTagButton_Click"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Browse Memes" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
-                <Grid Name="BrowseGrid" Background="Black">
-                    <Grid Name="BrowseMemeGrid" Visibility="Visible">
-                        <TextBox Name="TBBrowse" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="331" Height="31"/>
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="346,8,0,0" VerticalAlignment="Top" Height="34" Width="136" Click="BrowseMemesButton_Click" Background="#FFDDDDDD"/>
-                        <ScrollViewer Name="ScrollViewer" Margin="0,50,0,0"/>
-                    </Grid>
-                    <Grid Name="ShoweMemeGrid" Visibility="Collapsed">
-                        <local:MediaPlayer x:Name="MP_ShowMeme" VerticalAlignment="Top"/>
-                        <Button Content="Back" Width="100" Height="46" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="ShowMemeBackButton_Click"/>
-                        <Button Content="Show in Explorer" Width="100" Height="46" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="ExplorerButton_Click" Margin="0,0,110,0"/>
-                        <TextBlock Name="TB_Show_FilePath" Margin="50,360,0,0" TextWrapping="Wrap" Text="FilePath" VerticalAlignment="Top" Foreground="White"/>
-                        <TextBlock Name="TB_Show_FileName" Margin="50,380,0,0" TextWrapping="Wrap" Text="FileName" VerticalAlignment="Top" Foreground="White" Background="Black"/>
+            <TabItem Header="Upload Meme" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
+                <Grid Background="Black" Visibility="Visible">
+                    <Grid Name="Grid_UploadMeme" Visibility="Visible">
+                        <local:MediaPlayer x:Name="MP_UploadMeme" VerticalAlignment="Top"/>
+                        <Button Content="Upload Meme" Margin="0,335,0,0" VerticalAlignment="Top" Height="20" Click="UploadButtonClick"/>
+                        <TextBlock Name="TBlock_Upload_Path" Margin="50,360,0,0" TextWrapping="Wrap" Text="FilePath" VerticalAlignment="Top" Foreground="White"/>
+                        <TextBox Name="TBox_Upload_Name" Margin="50,380,0,0" TextWrapping="Wrap" Text="FileName" VerticalAlignment="Top" Foreground="White" Background="Black"/>
                         <TextBlock Margin="0,360,0,0" TextWrapping="Wrap" Text="Path:" VerticalAlignment="Top" Foreground="White"/>
                         <TextBlock Margin="0,380,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top" Foreground="White"/>
+                        <Button Name="Btn_AddToDatabase" Content="Add to Database" HorizontalAlignment="Left" Margin="0,401,0,0" VerticalAlignment="Top" Click="AddToDatabaseButtonClick" IsEnabled="False"/>
+                        <Button Name="Btn_AddTags" Content="Add Tags" HorizontalAlignment="Left" Margin="100,401,0,0" VerticalAlignment="Top" Click="AddTagButtonClick" IsEnabled="False"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            
+            <TabItem Header="Browse Memes" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
+                <Grid Background="Black">
+                    <Grid Name="Grid_BrowseMemes" Visibility="Visible">
+                        <TextBox Name="TBox_SearchBar" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="331" Height="31"/>
+                        <Button Content="Button" HorizontalAlignment="Left" Margin="346,8,0,0" VerticalAlignment="Top" Height="34" Width="136" Click="SearchMemesButtonClick" Background="#FFDDDDDD"/>
+                        <ScrollViewer Name="SV_BrowseMemes" Margin="0,50,0,0"/>
+                    </Grid>
+                    <Grid Name="Grid_InspectMeme" Visibility="Collapsed">
+                        <local:MediaPlayer x:Name="MP_InspectMeme" VerticalAlignment="Top"/>
+                        <Button Content="Back" Width="100" Height="46" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="InspectMemeBackButtonClick"/>
+                        <Button Content="Delete" Width="100" Height="46" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="110,0,0,0" Click="DeleteMemeButtonClick"/>
+                        <Button Content="Tags" Width="100" Height="46" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="220,0,0,0" Click="UpdateTagsButtonClick"/>
+                        <Button Content="Update" Width="100" Height="46" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="UpdateMemeButtonClick"/>
+                        <Button Content="Show in Explorer" Width="100" Height="46" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="ExplorerButtonClick" Margin="0,0,110,0"/>
+                        <TextBlock Name="TBlock_Inspect_FilePath" Margin="50,360,0,0" TextWrapping="Wrap" Text="FilePath" VerticalAlignment="Top" Foreground="White"/>
+                        <TextBox Name="TBox_Inspect_FileName" Margin="50,380,0,0" TextWrapping="Wrap" Text="FileName" VerticalAlignment="Top" Foreground="White" Background="Black"/>
+                        <TextBlock Margin="0,360,0,0" TextWrapping="Wrap" Text="Path:" VerticalAlignment="Top" Foreground="White"/>
+                        <TextBlock Margin="0,380,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top" Foreground="White" Height="18" HorizontalAlignment="Left"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -47,6 +54,12 @@
                 <Grid Background="Yellow"/>
             </TabItem>
         </TabControl>
-
+        
+        <Grid Name="Grid_Tags" Background="Black" Visibility="Collapsed" HorizontalAlignment="Left" Margin="113,0,0,0" Width="687">
+            <Button Content="Back" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="AddTagBackButtonClick" Height="34" Width="77"/>
+            <ScrollViewer Name="SV_BrowseTags" Margin="0,50,0,50"/>
+            <Button Content="Add Tag" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Bottom" Click="AddNewTagButtonClick" Height="34" Width="77"/>
+            <TextBox Name="TBox_AddTag" Text ="" HorizontalAlignment="Left" Margin="80,0,0,7" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="179"/>
+        </Grid>
     </Grid>
 </Window>
