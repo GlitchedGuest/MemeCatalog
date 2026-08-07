@@ -502,5 +502,17 @@ namespace MemeCatalog
                     i.Background = Brushes.White;
             }
         }
+
+        private void DeleteDatabaseButtonClick(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("This action cannot be restored","caption",MessageBoxButton.OKCancel);
+            if (result == MessageBoxResult.OK)
+            {
+                _context.Database.EnsureDeleted();
+                _wrapPanelBrowseMemes.Children.Clear();
+                Process.Start(Process.GetCurrentProcess().ProcessName);
+                Application.Current.Shutdown();
+            }
+        }
     }
 }

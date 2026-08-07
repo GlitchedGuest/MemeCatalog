@@ -92,9 +92,11 @@
             </Style.Triggers>
         </Style>
     </Control.Resources>
+    
+    
     <Grid MouseEnter="ControlGrid_MouseEnter" MouseLeave="ControlGrid_MouseLeave">
         <MediaElement x:Name="ME" Volume="0.5" Width="672" Height="330" VerticalAlignment="Top" ScrubbingEnabled="True" LoadedBehavior="Manual" MediaOpened="MediaOpened"/>
-        <Grid Name="ControlGrid" Background="#66000000" VerticalAlignment="Top" Height="54" Margin="0,276,0,0" HorizontalAlignment="Center" Width="652" Visibility="Collapsed" Opacity="0">
+        <Grid Name="ControlGrid" Background="#66000000" VerticalAlignment="Top" Height="54" Margin="0,276,0,0" HorizontalAlignment="Center" Width="652" Visibility="Collapsed" Opacity="1">
             <Slider Name="VideoProgressBar" Style="{StaticResource Horizontal_Slider}" Margin="10,10,10,0" ValueChanged="Slider_ValueChanged" Thumb.DragStarted="Slider_DragStarted" Thumb.DragCompleted="Slider_DragCompleted" Value="5"/>
             <Button Name="PlayButton" Content="❚❚" Click="PlayButton_Click"  Background="#00DDDDDD" Foreground="White" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="35" Margin="10,0,0,1"/>
             <Slider Name="VolumeSlider" Style="{StaticResource Volume_Slider}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="60" Margin="50,0,0,2" ValueChanged="VolumeSlider_ValueChanged" Maximum="1" Value="0.5"/>

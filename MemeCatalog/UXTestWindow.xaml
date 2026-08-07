@@ -63,7 +63,11 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Options" Background="#FF868686" Foreground="Black" Width="110.08" Height="50">
-                <Grid Background="Yellow"/>
+                <Grid Background="Black">
+                    <Button Content="Delete Database" Click="DeleteDatabaseButtonClick" HorizontalAlignment="Left" Margin="10,88,0,0" VerticalAlignment="Top" Height="47" Width="209" FontSize="24"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Options" VerticalAlignment="Top" Foreground="White" Height="63" Width="174" FontSize="48"/>
+
+                </Grid>
             </TabItem>
         </TabControl>
 
