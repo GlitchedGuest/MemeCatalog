@@ -22,7 +22,7 @@ namespace MemeCatalog
     {
         DispatcherTimer timer = new DispatcherTimer();
         private bool dragStarted = false;
-        private string path;
+        private string path = "";
         private bool pause = false;
         TimeSpan position = TimeSpan.Zero;
 
@@ -35,6 +35,8 @@ namespace MemeCatalog
 
         public void LoadMedia(string _path)
         {
+            if (_path == "")
+                return;
             path = _path;
             ME.Source = new Uri(_path);
             ME.Play();
@@ -52,14 +54,13 @@ namespace MemeCatalog
                 ControlGrid.Visibility = Visibility.Visible;
                 VideoProgressBar.Maximum = ME.NaturalDuration.TimeSpan.Ticks;
                 timer.Interval = TimeSpan.FromMilliseconds(10);
-                timer.Tick += timer_Tick;
+                timer.Tick += TimerTick;
                 timer.Start();
             }
             else
                 ControlGrid.Visibility = Visibility.Collapsed;
         }
-
-        void timer_Tick(object sender, EventArgs e)
+        private void TimerTick(object? sender, EventArgs e)
         {                
 
             if (ME.Source != null)

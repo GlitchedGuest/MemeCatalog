@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace MemeCatalogDatabase
 {
     public class Meme
     {
-        public int MemeId { get; set; }
-        public string? Name { get; set; }
-        public string? Path { get; set; } 
+        public int id { get; set; }
 
-        public string? FileType
+        [StringLength(200)]
+        public string? name { get; set; }
+        public string? path { get; set; } 
+
+        public string? fileType
         {
-            get => Path?.Substring(Path.LastIndexOf('.') + 1, Path.Length - 1 - Path.LastIndexOf('.'));
-            set => Path?.Substring(Path.LastIndexOf('.') + 1, Path.Length - 1 - Path.LastIndexOf('.'));
+            get => path?.Substring(path.LastIndexOf('.') + 1, path.Length - 1 - path.LastIndexOf('.'));
         }
+
+        public int FileSize { get; set; }
+        public DateTime? dateUploaded { get; set; }
 
         public virtual ICollection<Tag>
             Tags
@@ -24,7 +29,7 @@ namespace MemeCatalogDatabase
 
         public override string ToString()
         {
-            return Name;
+            return name != null ? name : "";
         }
     }
 }

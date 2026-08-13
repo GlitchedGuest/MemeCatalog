@@ -1,18 +1,28 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace MemeCatalogDatabase
 {
+    [Index(nameof(name), IsUnique = true)]
     public class Tag
     {
-        public int TagId { get; set; }
-        public string Name { get; set; }
+        public int id { get; set; }
+
+        
+        [StringLength(100)]
+        public string? name { get; set; }
 
         public virtual ICollection<Meme>
             Memes
         { get; private set; } =
             new ObservableCollection<Meme>();
+        public override string ToString()
+        {
+            return name != null ? name : "";
+        }
     }
 }

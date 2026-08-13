@@ -1,22 +1,10 @@
 ﻿using MemeCatalogDatabase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Security.Cryptography;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace MemeCatalog
 {
@@ -24,7 +12,7 @@ namespace MemeCatalog
     {
         //Variables for db operations
         private readonly MemeContext _context = new MemeContext();
-        private HashSet<String> _tagsSet = new HashSet<String>();
+        private HashSet<String?> _tagsSet = new HashSet<String?>();
 
         //Wrappanel for buttons
         private WrapPanel _wrapPanelBrowseMemes = new WrapPanel();
@@ -32,13 +20,13 @@ namespace MemeCatalog
         private WrapPanel _wrapPanelBrowseTags = new WrapPanel();
 
         //Variables for Creating/editing Memes
-        private Meme _meme = null;
-        private Tag _tag = null;
-        private Button _buttonReference = null;
+        private Meme? _meme = null;
+        private Tag? _tag = null;
+        private Button? _buttonReference = null;
 
         //Variables for filter options
         private bool _filterEnabled = false;
-        private HashSet<String> _filterTagSet = new HashSet<string>();
+        private HashSet<String?> _filterTagSet = new HashSet<string?>();
         private HashSet<String> _filterFileType = new HashSet<string>();
 
 
@@ -57,7 +45,7 @@ namespace MemeCatalog
 
         //Loading buttons
 
-        private Button CreateTagButton(Tag tag, RoutedEventHandler function, HashSet<string> tagSet, bool color = true)
+        private Button CreateTagButton(Tag tag, RoutedEventHandler function, HashSet<string?> tagSet, bool color = true)
         {
             Button _button = new Button();
 
@@ -66,11 +54,12 @@ namespace MemeCatalog
             _button.HorizontalAlignment = HorizontalAlignment.Left;
             _button.Height = 50;
             _button.Width = 100;
-            if(tagSet.Contains(tag.Name) && color)
+            var tagName = tag.name != null ? tag.name : "";
+            if(tagSet.Contains(tagName) && color)
                 _button.Background = Brushes.Gray;
             else
                 _button.Background = Brushes.White;
-            _button.Content = tag.Name;
+            _button.Content = tag.name;
             _button.Click += function;
 
             return _button;
@@ -175,13 +164,15 @@ namespace MemeCatalog
 
             _meme = new Meme()
             {
-                Path = TBlock_Upload_Path.Text
+                path = TBlock_Upload_Path.Text
             };
         }
         private void AddToDatabaseButtonClick(object sender, RoutedEventArgs e)
         {
-            _meme.Name = TBox_Upload_Name.Text;
-            var _tags = _context.Tags.Where(x => _tagsSet.Contains(x.Name)).ToList();
+            if (_meme == null)
+                return;
+            _meme.name = TBox_Upload_Name.Text;
+            var _tags = _context.Tags.Where(x => _tagsSet.Contains(x.name != null ? x.name : "")).ToList();
             _tags.ForEach(x => _meme.Tags.Add(x));
 
             _context.Memes.Add(_meme);
@@ -213,12 +204,19 @@ namespace MemeCatalog
 
         private void UpdateMemeButtonClick(object sender, RoutedEventArgs e)
         {
-            _meme.Name = TBox_Inspect_FileName.Text;
-            (_buttonReference.Content as UCMemeButton)._button.Text = TBox_Inspect_FileName.Text;
+            if(_buttonReference == null || _meme == null)
+                return;
+            _meme.name = TBox_Inspect_FileName.Text;
+            var ucButton = (_buttonReference.Content as UCMemeButton);
+            if(ucButton != null)
+                ucButton._button.Text = TBox_Inspect_FileName.Text;
             _context.SaveChanges();
         }
         private void DeleteMemeButtonClick(object sender, RoutedEventArgs e)
         {
+            if (_meme == null)
+                return;
+
             _context.Memes.Remove(_meme);
 
             MP_InspectMeme.DeloadMedia();
@@ -231,9 +229,10 @@ namespace MemeCatalog
         }
         private void InspectMemeBackButtonClick(object sender, RoutedEventArgs e)
         {
-            if(_meme != null)
-                _meme.Tags.Clear();
-            var _tags = _context.Tags.Where(x => _tagsSet.Contains(x.Name)).ToList();
+            if (_meme == null)
+                return;
+            _meme.Tags.Clear();
+            var _tags = _context.Tags.Where(x => _tagsSet.Contains(x.name != null ? x.name : "")).ToList();
             _tags.ForEach(x => _meme.Tags.Add(x));
             _context.SaveChanges();
             _tagsSet.Clear();
@@ -253,15 +252,18 @@ namespace MemeCatalog
             HashSet<int> _memesIDWithTags = new HashSet<int>();
             foreach(var i in _filterTagSet)
             {
-                var pom = _context.Memes.Where(x => x.Tags.Select(x => x.Name).Contains(i)).Select(x => x.MemeId).ToHashSet();
+                var pom = _context.Memes.Where(x => x.Tags.Select(x => x.name).Contains(i)).Select(x => x.id).ToHashSet();
                 _memesIDWithTags = _memesIDWithTags.Concat(pom).ToHashSet();
             }
-            var _memesWithTags = _filterTagSet.Any() ? _context.Memes.Where(x => _memesIDWithTags.Contains(x.MemeId)) : _context.Memes;
-            var _memesFileTypes = _filterFileType.Any() ? _memesWithTags.Where(x => _filterFileType.Contains(x.FileType)) : _memesWithTags;
-            var _memeList = _memesFileTypes.Select(x => x.Name).Where(x => x.Contains(_browse)).ToList();
+            var _memesWithTags = _filterTagSet.Any() ? _context.Memes.Where(x => _memesIDWithTags.Contains(x.id)) : _context.Memes;
+            var _memesFileTypes = _filterFileType.Any() ? _memesWithTags.Where(x => _filterFileType.Contains(x.fileType != null ? x.fileType : "")) : _memesWithTags;
+            var _memeList = _memesFileTypes.Select(x => x.name).Where(x => x != null ? x.Contains(_browse) : false).ToList();
             foreach (Button i in _wrapPanelBrowseMemes.Children)
             {
-                if (_memeList.Contains((i.Content as UCMemeButton)._button.Text))
+                var ucButton = i.Content as UCMemeButton;
+                if (ucButton == null)
+                    continue;
+                if (_memeList.Contains(ucButton._button.Text))
                     i.Visibility = Visibility.Visible;
                 else
                     i.Visibility = Visibility.Collapsed;
@@ -303,7 +305,7 @@ namespace MemeCatalog
             filterFileTypes.VerticalAlignment = VerticalAlignment.Top;
 
             var _tagList = _context.Tags.ToList();
-            var _fileTypes = _context.Memes.Select(x => x.FileType).Distinct().ToList();
+            var _fileTypes = _context.Memes.Select(x => x.fileType).Distinct().ToList();
 
             foreach (var i in _tagList)
             {
@@ -312,6 +314,8 @@ namespace MemeCatalog
 
             foreach (var i in _fileTypes)
             {
+                if (i == null)
+                    continue;
                 filterFileTypes.Children.Add(CreateFileButton(i, FilterFileTypeButtonClick,_filterFileType));
             }
             SV_FilterMemes_Tags.Content = filterTags;
@@ -320,61 +324,79 @@ namespace MemeCatalog
 
         private void FilterFileTypeButtonClick(object sender, RoutedEventArgs e)
         {
-            if ((sender as Button).Background == Brushes.Gray)
+            var button = (Button)sender;
+            var buttonContent = button.Content.ToString();
+            if (button == null || buttonContent == null)
+                return;
+            if (button.Background == Brushes.Gray)
             {
-                (sender as Button).Background = Brushes.White;
-                _filterFileType.Remove((sender as Button).Content.ToString());
+                button.Background = Brushes.White;
+                _filterFileType.Remove(buttonContent);
             }
             else
             {
-                (sender as Button).Background = Brushes.Gray;
-
-                _filterFileType.Add((sender as Button).Content.ToString());
+                button.Background = Brushes.Gray;
+                _filterFileType.Add(buttonContent);
             }
             
         }
 
         private void FilterTagButtonClick(object sender, RoutedEventArgs e)
         {
-            if ((sender as Button).Background == Brushes.Gray)
+            var button = (Button)sender;
+            var buttonContent = button.Content.ToString();
+            if (button == null || buttonContent == null)
+                return;
+            if (button.Background == Brushes.Gray)
             {
-                (sender as Button).Background = Brushes.White;
-                _filterTagSet.Remove((sender as Button).Content.ToString());
+                button.Background = Brushes.White;
+                _filterTagSet.Remove(buttonContent);
             }
             else
             {
-                (sender as Button).Background = Brushes.Gray;
-
-                _filterTagSet.Add((sender as Button).Content.ToString());
+                button.Background = Brushes.Gray;
+                _filterTagSet.Add(buttonContent);
             }
-
         }
 
         private void InspectMemeButtonClick(object sender, RoutedEventArgs e)
         {
+            if (_buttonReference == null)
+                return;
+            var ucButton = _buttonReference.Content as UCMemeButton;
+            if (ucButton == null)
+                return;
             Grid_InspectMeme.Visibility = Visibility.Visible;
             _buttonReference = sender as Button;
-            _meme = (_buttonReference.Content as UCMemeButton).meme;
-            _tagsSet = _meme.Tags.Select(x => x.Name).ToHashSet();
-            MP_InspectMeme.LoadMedia(_meme.Path);
-            TBox_Inspect_FileName.Text = ((sender as Button).Content as UCMemeButton).meme.Name;
-            TBlock_Inspect_FilePath.Text = ((sender as Button).Content as UCMemeButton).meme.Path;
+            _meme = ucButton.meme;
+            _tagsSet = _meme.Tags.Select(x => x.name).ToHashSet();
+            MP_InspectMeme.LoadMedia(_meme.path != null ? _meme.path : "");
+            var button = (Button)sender;
+            var ucButton2 = button.Content as UCMemeButton;
+            if (button == null || ucButton2 == null)
+                return;
+            TBox_Inspect_FileName.Text = ucButton2.meme.name;
+            TBlock_Inspect_FilePath.Text = ucButton2.meme.path;
         }
 
         //Tag Adding
 
         private void TagButtonClick(object sender, RoutedEventArgs e)
         {
-            if ((sender as Button).Background == Brushes.Gray)
+            var button = (Button)sender;
+            if (button == null)
+                return;
+
+            if (button.Background == Brushes.Gray)
             {
-                (sender as Button).Background = Brushes.White;
-                _tagsSet.Remove((sender as Button).Content.ToString());
+                button.Background = Brushes.White;
+                _tagsSet.Remove(button.Content.ToString());
             }
             else
             {
-                (sender as Button).Background = Brushes.Gray;
+                button.Background = Brushes.Gray;
 
-                _tagsSet.Add((sender as Button).Content.ToString());
+                _tagsSet.Add(button.Content.ToString());
             }
         }
         private void AddTagBackButtonClick(object sender, RoutedEventArgs e)
@@ -394,7 +416,7 @@ namespace MemeCatalog
                 return;
             Tag _newTag = new Tag()
             {
-                Name = Grid_Tags.Visibility == Visibility.Visible ? TBox_AddTag.Text : TBox_Tags_AddTag.Text
+                name = Grid_Tags.Visibility == Visibility.Visible ? TBox_AddTag.Text : TBox_Tags_AddTag.Text
             };
             _context.Tags.Add(_newTag);
             _context.SaveChanges();
@@ -410,7 +432,7 @@ namespace MemeCatalog
         private void SearchTagsButtonClick(object sender, RoutedEventArgs e)
         {
             var _browse = TBox_Tags_SearchBar.Text;
-            var _tagsList = _context.Tags.Select(x => x.Name).Where(x => x.Contains(_browse)).ToList();
+            var _tagsList = _context.Tags.Select(x => x.name).Where(x => x != null ? x.Contains(_browse) : false).ToList();
             foreach (Button i in _wrapPanelBrowseTags.Children)
             {
                 if (_tagsList.Contains(i.Content))
@@ -423,8 +445,11 @@ namespace MemeCatalog
         private void InspectTagButtonClick(object sender, RoutedEventArgs e)
         {
             Grid_BrowseTags.Visibility = Visibility.Collapsed;
-            _tag = _context.Tags.Where(x => x.Name == (sender as Button).Content).FirstOrDefault();
-            TBox_Tags_TagName.Text = _tag.Name;
+            var button = (Button)sender;
+            _tag = _context.Tags.Where(x => x.name == button.Content as String).FirstOrDefault();
+            if (_tag == null)
+                return;
+            TBox_Tags_TagName.Text = _tag.name;
 
             LoadMemesWithTagsButtons();
             
@@ -434,6 +459,8 @@ namespace MemeCatalog
 
         private void LoadMemesWithTagsButtons()
         {
+            if (_tag == null)
+                return;
             var _memesWithTags = _context.Memes.Where(x => x.Tags.Contains(_tag)).ToList();
             var _wp = new WrapPanel();
             _wp.Orientation = Orientation.Horizontal;
@@ -458,16 +485,22 @@ namespace MemeCatalog
 
         private void UpdateTagButtonClick(object sender, RoutedEventArgs e)
         {
-            _tag.Name = TBox_Tags_TagName.Text;
+            if (_buttonReference == null || _tag == null)
+                return;
+            _tag.name = TBox_Tags_TagName.Text;
             _buttonReference.Content = TBox_Tags_TagName.Text;
             _context.SaveChanges();
         }
 
         private void DeleteTagButtonClick(object sender, RoutedEventArgs e)
         {
+            if (_tag == null)
+                return;
             _context.Tags.Remove(_tag);
-
-            (SV_Tags_BrowseTags.Content as WrapPanel).Children.Remove(_buttonReference);
+            var svWP = SV_Tags_BrowseTags.Content as WrapPanel;
+            if (svWP == null)
+                return;
+            svWP.Children.Remove(_buttonReference);
 
             _buttonReference = null;
             _tag = null;
